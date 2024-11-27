@@ -1,0 +1,48 @@
+camera:
+  camera:
+    ros__parameters:
+      serial_no: ""
+      ip_address: ""
+      usb_port_id: ""
+      device_type: ""
+      rosbag_filename: ""
+      initial_reset: false
+      enable_pointcloud: false
+
+      color_fps: 30.0
+      color_height: 480
+      color_width: 640
+      color_qos: "SYSTEM_DEFAULT"
+
+      depth_fps: 30.0
+      depth_height: 480
+      depth_width: 640
+      depth_qos: "SYSTEM_DEFAULT"
+
+      infra_height: 480
+      infra_width: 640
+      infra_qos: "SYSTEM_DEFAULT"
+
+      gyro_fps: 0.0
+
+      enable_accel: false
+      enable_color: true
+      enable_depth: true
+      enable_gyro: false
+      enable_infra1: false
+      enable_infra2: false
+      filters: ''
+        
+      # preparing camera for external event operating mode: https://www.framos.com/framos3d/D400e/Documentation/Application%20Notes/Framos_D400e_External_Event_Camera_Synchronization_AppNote.pdf
+      stereo_module:
+        packet_size: 1500.0
+        inter_packet_delay: 13
+        inter_cam_sync_mode: 259 # external event mode (for D435e camera with latest firmware v1.11.0.0)
+        ext_trigger_source: 2 # software trigger
+        software_trigger_all_sensors: true # trigger all sensors (stereo and rgb)
+
+      rgb_camera:
+        packet_size: 1500.0
+        inter_packet_delay: 13
+        inter_cam_sync_mode: 1 # external event mode
+        ext_trigger_source: 2 # software trigger
