@@ -1174,9 +1174,9 @@ void BaseRealSenseNode::setupPublishers()
                 rectified_image = true;
 
             std::string stream_name(STREAM_NAME(stream));
-            image_raw << stream_name << "/image_" << ((rectified_image)?"rect_":"") << "raw";
-            camera_info << stream_name << "/camera_info";
-            topic_metadata << stream_name << "/metadata";
+            image_raw << "~/" << stream_name << "/image_" << ((rectified_image)?"rect_":"") << "raw";
+            camera_info << "~/" << stream_name << "/camera_info";
+            topic_metadata << "~/" << stream_name << "/metadata";
 
             _image_publishers[stream] = {image_transport::create_publisher(&_node, image_raw.str(), qos_string_to_qos(_qos[stream]))};
             _info_publisher[stream] = _node.create_publisher<sensor_msgs::msg::CameraInfo>(
@@ -1193,8 +1193,8 @@ void BaseRealSenseNode::setupPublishers()
             if (_align_depth && stream == COLOR)
             {
                 std::stringstream aligned_image_raw, aligned_camera_info;
-                aligned_image_raw << "aligned_depth_to_" << stream_name << "/image_raw";
-                aligned_camera_info << "aligned_depth_to_" << stream_name << "/camera_info";
+                aligned_image_raw << "~/" << "aligned_depth_to_" << stream_name << "/image_raw";
+                aligned_camera_info << "~/" << "aligned_depth_to_" << stream_name << "/camera_info";
 
                 std::string aligned_stream_name = "aligned_depth_to_" + stream_name;
                 _depth_aligned_image_publishers[stream] = {image_transport::create_publisher(&_node, aligned_image_raw.str(),
@@ -1209,7 +1209,7 @@ void BaseRealSenseNode::setupPublishers()
             if (stream == DEPTH && _pointcloud)
             {
                 _pointcloud_publisher = _node.create_publisher<sensor_msgs::msg::PointCloud2>(
-                      "depth/color/points",
+                      "~/depth/color/points",
                       rclcpp::QoS(
                         rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_pointcloud_qos)),
                         qos_string_to_qos(_pointcloud_qos)));
@@ -1223,7 +1223,7 @@ void BaseRealSenseNode::setupPublishers()
         ROS_INFO("Start publisher IMU");
         _synced_imu_publisher = std::make_shared<SyncedImuPublisher>(
               _node.create_publisher<sensor_msgs::msg::Imu>(
-                "imu",
+                "~/imu",
                 rclcpp::QoS(
                   rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_imu_qos)),
                   qos_string_to_qos(_imu_qos))));
@@ -1234,14 +1234,14 @@ void BaseRealSenseNode::setupPublishers()
         if (_enable[GYRO])
         {
             _imu_publishers[GYRO] = _node.create_publisher<sensor_msgs::msg::Imu>(
-                  "gyro/sample",
+                  "~/gyro/sample",
                   rclcpp::QoS(
                     rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_qos[GYRO])),
                     qos_string_to_qos(_qos[GYRO])));
 
             auto stream(GYRO);
             _metadata_publishers[stream] = _node.create_publisher<realsense2_camera_msgs::msg::Metadata>(
-                  "gyro/metadata",
+                  "~/gyro/metadata",
                   rclcpp::QoS(
                     rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_info_qos[stream])),
                     qos_string_to_qos(_info_qos[stream])));
@@ -1250,14 +1250,14 @@ void BaseRealSenseNode::setupPublishers()
         if (_enable[ACCEL])
         {
             _imu_publishers[ACCEL] = _node.create_publisher<sensor_msgs::msg::Imu>(
-                  "accel/sample",
+                  "~/accel/sample",
                   rclcpp::QoS(
                     rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_qos[ACCEL])),
                     qos_string_to_qos(_qos[ACCEL])));
 
             auto stream(ACCEL);
             _metadata_publishers[stream] = _node.create_publisher<realsense2_camera_msgs::msg::Metadata>(
-                  "accel/metadata",
+                  "~/accel/metadata",
                   rclcpp::QoS(
                     rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_info_qos[stream])),
                     qos_string_to_qos(_info_qos[stream])));
@@ -1266,14 +1266,14 @@ void BaseRealSenseNode::setupPublishers()
     if (_enable[POSE])
     {
         _odom_publisher = _node.create_publisher<nav_msgs::msg::Odometry>(
-              "odom/sample",
+              "~/odom/sample",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_qos[POSE])),
                 qos_string_to_qos(_qos[POSE])));
 
         auto stream(POSE);
         _metadata_publishers[stream] = _node.create_publisher<realsense2_camera_msgs::msg::Metadata>(
-                "odom/metadata",
+                "~/odom/metadata",
                 rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_qos[stream])),
                 qos_string_to_qos(_qos[stream])));
@@ -1283,7 +1283,7 @@ void BaseRealSenseNode::setupPublishers()
         _enable[DEPTH])
     {
         _depth_to_other_extrinsics_publishers[FISHEYE] = _node.create_publisher<Extrinsics>(
-              "extrinsics/depth_to_fisheye",
+              "~/extrinsics/depth_to_fisheye",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_extrinsics_qos[FISHEYE])),
                 qos_string_to_qos(_extrinsics_qos[FISHEYE])));
@@ -1293,7 +1293,7 @@ void BaseRealSenseNode::setupPublishers()
         _enable[DEPTH])
     {
         _depth_to_other_extrinsics_publishers[COLOR] = _node.create_publisher<Extrinsics>(
-              "extrinsics/depth_to_color",
+              "~/extrinsics/depth_to_color",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_extrinsics_qos[COLOR])),
                 qos_string_to_qos(_extrinsics_qos[COLOR])));
@@ -1303,7 +1303,7 @@ void BaseRealSenseNode::setupPublishers()
         _enable[DEPTH])
     {
         _depth_to_other_extrinsics_publishers[INFRA1] = _node.create_publisher<Extrinsics>(
-              "extrinsics/depth_to_infra1",
+              "~/extrinsics/depth_to_infra1",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_extrinsics_qos[INFRA1])),
                 qos_string_to_qos(_extrinsics_qos[INFRA1])));
@@ -1313,7 +1313,7 @@ void BaseRealSenseNode::setupPublishers()
         _enable[DEPTH])
     {
         _depth_to_other_extrinsics_publishers[INFRA2] = _node.create_publisher<Extrinsics>(
-              "extrinsics/depth_to_infra2",
+              "~/extrinsics/depth_to_infra2",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_extrinsics_qos[INFRA2])),
                 qos_string_to_qos(_extrinsics_qos[INFRA2])));
@@ -2404,7 +2404,7 @@ void BaseRealSenseNode::publishIntrinsics()
     if (_enable[GYRO])
     {
         _imu_info_publisher[GYRO] = _node.create_publisher<IMUInfo>(
-              "gyro/imu_info",
+              "~/gyro/imu_info",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_info_qos[GYRO])),
                 qos_string_to_qos(_info_qos[GYRO])));
@@ -2415,7 +2415,7 @@ void BaseRealSenseNode::publishIntrinsics()
     if (_enable[ACCEL])
     {
         _imu_info_publisher[ACCEL] = _node.create_publisher<IMUInfo>(
-              "accel/imu_info",
+              "~/accel/imu_info",
               rclcpp::QoS(
                 rclcpp::QoSInitialization::from_rmw(qos_string_to_qos(_info_qos[GYRO])),
                 qos_string_to_qos(_info_qos[GYRO])));
