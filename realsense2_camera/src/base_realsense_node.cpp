@@ -12,11 +12,11 @@ using namespace realsense2_camera;
 
 // stream_index_pair sip{stream_type, stream_index};
 #define STREAM_NAME(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << _stream_name[sip.first] << ((sip.second>0) ? std::to_string(sip.second) : ""))).str()
-#define FRAME_ID(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << getNamespaceStr() << "_" << STREAM_NAME(sip) << "_frame")).str()
-#define OPTICAL_FRAME_ID(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << getNamespaceStr() << "_" << STREAM_NAME(sip) << "_optical_frame")).str()
-#define ALIGNED_DEPTH_TO_FRAME_ID(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << getNamespaceStr() << "_aligned_depth_to_" << STREAM_NAME(sip) << "_frame")).str()
-#define BASE_FRAME_ID() (static_cast<std::ostringstream&&>(std::ostringstream() << getNamespaceStr() << "_link")).str()
-#define ODOM_FRAME_ID() (static_cast<std::ostringstream&&>(std::ostringstream() << getNamespaceStr() << "_odom_frame")).str()
+#define FRAME_ID(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << getNodeNameStr() << "_" << STREAM_NAME(sip) << "_frame")).str()
+#define OPTICAL_FRAME_ID(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << getNodeNameStr() << "_" << STREAM_NAME(sip) << "_optical_frame")).str()
+#define ALIGNED_DEPTH_TO_FRAME_ID(sip) (static_cast<std::ostringstream&&>(std::ostringstream() << getNodeNameStr() << "_aligned_depth_to_" << STREAM_NAME(sip) << "_frame")).str()
+#define BASE_FRAME_ID() (static_cast<std::ostringstream&&>(std::ostringstream() << getNodeNameStr() << "_link")).str()
+#define ODOM_FRAME_ID() (static_cast<std::ostringstream&&>(std::ostringstream() << getNodeNameStr() << "_odom_frame")).str()
 
 
 std::vector<std::string> split(const std::string& s, char delimiter) // Thanks to Jonathan Boccara (https://www.fluentcpp.com/2017/04/21/how-to-split-a-string-in-c/)
@@ -182,6 +182,11 @@ std::string BaseRealSenseNode::getNamespaceStr()
     std::string ns(_node.get_namespace());
     ns.erase (std::remove(ns.begin(), ns.end(), '/'), ns.end());
     return ns;
+}
+
+std::string BaseRealSenseNode::getNodeNameStr()
+{
+    return _node.get_name();
 }
 
 static const rmw_qos_profile_t rmw_qos_profile_latched =

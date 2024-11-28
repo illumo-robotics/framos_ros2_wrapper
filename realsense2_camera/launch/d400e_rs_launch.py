@@ -23,6 +23,7 @@ from ament_index_python.packages import get_package_share_directory
 
 
 configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
+                           {'name': 'camera_namespace',             'default': "''", 'description': 'camera namespace'},
                            {'name': 'dev_filter',                   'default': "''", 'description': 'device filter file'},
                            {'name': 'device_type',                  'default': "''", 'description': 'choose device by type'},
                            {'name': 'config_file',                  'default': "'src/realsense2_camera/config/d400e.yaml'", 'description': 'yaml config file'},
@@ -104,7 +105,7 @@ def generate_launch_description():
             launch_ros.actions.Node(
                 condition=IfCondition(PythonExpression([LaunchConfiguration('config_file'), " == ''"])),
                 package='realsense2_camera', 
-                node_namespace=LaunchConfiguration("camera_name"),
+                node_namespace=LaunchConfiguration("camera_namespace"),
                 node_name=LaunchConfiguration("camera_name"),
                 node_executable='framos_realsense2_camera_node',
                 prefix=['stdbuf -o L'],
@@ -116,7 +117,7 @@ def generate_launch_description():
             launch_ros.actions.Node(
                 condition=IfCondition(PythonExpression([LaunchConfiguration('config_file'), " != ''"])),
                 package='realsense2_camera', 
-                node_namespace=LaunchConfiguration("camera_name"),
+                node_namespace=LaunchConfiguration("camera_namespace"),
                 node_name=LaunchConfiguration("camera_name"),
                 node_executable='framos_realsense2_camera_node',
                 prefix=['stdbuf -o L'],
@@ -133,7 +134,7 @@ def generate_launch_description():
             launch_ros.actions.Node(
                 condition=IfCondition(PythonExpression([LaunchConfiguration('config_file'), " == ''"])),
                 package='realsense2_camera', 
-                namespace=LaunchConfiguration("camera_name"),
+                namespace=LaunchConfiguration("camera_namespace"),
                 name=LaunchConfiguration("camera_name"),
                 executable='framos_realsense2_camera_node',
                 parameters = [set_configurable_parameters(configurable_parameters)
@@ -145,7 +146,7 @@ def generate_launch_description():
             launch_ros.actions.Node(
                 condition=IfCondition(PythonExpression([LaunchConfiguration('config_file'), " != ''"])),
                 package='realsense2_camera', 
-                namespace=LaunchConfiguration("camera_name"),
+                namespace=LaunchConfiguration("camera_namespace"),
                 name=LaunchConfiguration("camera_name"),
                 executable='framos_realsense2_camera_node',
                 parameters = [set_configurable_parameters(configurable_parameters)

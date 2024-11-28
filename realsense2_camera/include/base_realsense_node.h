@@ -200,6 +200,7 @@ namespace realsense2_camera
         };
 
         std::string getNamespaceStr();
+        std::string getNodeNameStr();
         void getParameters();
         void setupDevice();
         void setupErrorCallback();
