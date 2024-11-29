@@ -23,7 +23,7 @@ from ament_index_python.packages import get_package_share_directory
 
 
 configurable_parameters = [{'name': 'camera_name',                  'default': 'camera', 'description': 'camera unique name'},
-                           {'name': 'camera_namespace',             'default': "''", 'description': 'camera namespace'},
+                           {'name': 'camera_namespace',             'default': '', 'description': 'camera namespace'},
                            {'name': 'dev_filter',                   'default': "''", 'description': 'device filter file'},
                            {'name': 'device_type',                  'default': "''", 'description': 'choose device by type'},
                            {'name': 'config_file',                  'default': "'src/realsense2_camera/config/d400e.yaml'", 'description': 'yaml config file'},
