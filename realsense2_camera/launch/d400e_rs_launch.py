@@ -113,6 +113,8 @@ def generate_launch_description():
                             ],
                 output='screen',
                 arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
+                respawn=True,
+                respawn_delay=1,
                 ),
             launch_ros.actions.Node(
                 condition=IfCondition(PythonExpression([LaunchConfiguration('config_file'), " != ''"])),
@@ -126,6 +128,8 @@ def generate_launch_description():
                             ],
                 output='screen',
                 arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
+                respawn=True,
+                respawn_delay=1,
                 ),
             ])
     else:
@@ -142,6 +146,8 @@ def generate_launch_description():
                 output='screen',
                 arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
                 emulate_tty=True,
+                respawn=True,
+                respawn_delay=1,
                 ),
             launch_ros.actions.Node(
                 condition=IfCondition(PythonExpression([LaunchConfiguration('config_file'), " != ''"])),
@@ -155,5 +161,7 @@ def generate_launch_description():
                 output='screen',
                 arguments=['--ros-args', '--log-level', LaunchConfiguration('log_level')],
                 emulate_tty=True,
+                respawn=True,
+                respawn_delay=1,
                 ),
         ])
